@@ -83,7 +83,7 @@ async function run() {
         })
 
         // services related api
-        app.get('/manu', async (req, res) => {
+        app.get('/menu', async (req, res) => {
             const cursor = menuCollection.find();
             const result = await cursor.toArray();
             res.send(result);
@@ -94,8 +94,7 @@ async function run() {
             const query = { _id: new ObjectId(id) }
 
             const options = {
-                // Include only the `title` and `imdb` fields in the returned document
-                projection: { title: 1, price: 1, service_id: 1, img: 1 },
+                projection: { name: 1, price: 1, category: 1, image: 1 },
             };
 
             const result = await menuCollection.findOne(query, options);
