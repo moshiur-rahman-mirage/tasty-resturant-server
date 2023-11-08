@@ -24,9 +24,8 @@ app.use(express.urlencoded({limit: '50mb'}));
 app.use(cookieParser());
 
 
-console.log(process.env.DB_PASS)
 
-const uri = `mongodb+srv://librarian:Ms121212@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -93,12 +92,31 @@ async function run() {
             res.send(result);
         })
 
+
+        // app.get('/menu/sort', async (req, res) => {
+        //     const filter = req.query;
+        //     console.log(filter);
+        //     let query = {};
+
+        //     const options = {
+        //         sort: {
+        //             price: filter.sort === 'asc' ? 1 : -1
+        //         }
+        //     };
+
+        //     const cursor = serviceCollection.find(query, options);
+        //     const result = await cursor.toArray();
+        //     res.send(result);
+        // })
+
+
+
         app.get('/menu/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
 
             const options = {
-                projection: { name: 1, price: 1, category: 1, image: 1 },
+                projection: { name: 1, rate: 1, category: 1, image: 1,creator:1,image_links:1 },
             };
 
             const result = await menuCollection.findOne(query, options);
@@ -114,10 +132,10 @@ async function run() {
 
 
         // orders 
-        app.get('/orders', async (req, res) => { //logger, verifyToken, 
-            // if(req.user.email !== req.query.email){
-            //     return res.status(403).send({message: 'forbidden access'})
-            // }
+        app.get('/orders',logger, verifyToken,  async (req, res) => { //
+            if(req.user.email !== req.query.email){
+                return res.status(403).send({message: 'forbidden access'})
+            }
             let query = {};
             if (req.query?.email) {
                 query = { email: req.query.email }
@@ -146,6 +164,37 @@ async function run() {
             const result = await orderCollection.updateOne(filter, updateDoc);
             res.send(result);
         })
+
+
+        // app.post('/mealupdate/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const filter = { _id: new ObjectId(id) };
+        //     const updateDoc = {
+        //         $inc: {
+        //             order_count: 1
+        //         },
+        //     };
+        //     const result = await menuCollection.updateOne(filter, updateDoc);
+        //     console.log('incremented?')
+        //     res.send(result);
+        // })
+
+
+
+        app.post('/mealupdate/:id', async (req, res) => {
+            console.log('hhh')
+            const id = req.params.id;
+            const incval=req.body.count
+            const filter = { _id: new ObjectId(id) };
+              const update = {
+                $inc: { order_qty: incval,available_qty:0-incval },
+                
+              };
+          
+             const result = await menuCollection.updateOne(filter, update);
+             res.send(result)
+            });
+          
 
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
