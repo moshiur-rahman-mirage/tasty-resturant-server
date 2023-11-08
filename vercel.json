@@ -12,5 +12,15 @@
             "dest": "/",
             "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
         }
-    ]
+    ],
+    
+        "images": {
+          "sizes": [256, 640, 1080, 2048, 3840],
+          "minimumCacheTTL": 60,
+          "formats": ["image/jpeg"],
+          "dangerouslyAllowSVG": false,
+          "contentSecurityPolicy": "script-src 'none'; frame-src 'none'; sandbox;",
+          "contentDispositionType": "inline"
+        }
+      
 }
