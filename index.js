@@ -85,12 +85,33 @@ async function run() {
             res.clearCookie('token', { maxAge: 0 }).send({ success: true })
         })
 
-        // services related api
+   
         app.get('/menu', async (req, res) => {
-            const cursor = menuCollection.find();
+            const cursor = menuCollection.find().sort( { "order_qty": -1 } ).limit(6);;
             const result = await cursor.toArray();
             res.send(result);
         })
+
+        app.get('/menu/all', async (req, res) => {
+            const cursor = menuCollection.find().sort( { "order_qty": -1 } );
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/menu/all', async (req, res) => {
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            const result = await menuCollection.find().sort( { "order_qty": -1 })
+            .skip(page * size)
+            .limit(size)
+            .toArray();
+            res.send(result);
+          })
+
+          app.get('/menucount', async (req, res) => {
+            const count = await menuCollection.estimatedDocumentCount();
+            res.send({ count });
+          })
 
 
         // app.get('/menu/sort', async (req, res) => {
@@ -116,7 +137,7 @@ async function run() {
             const query = { _id: new ObjectId(id) }
 
             const options = {
-                projection: { name: 1, rate: 1, category: 1, image: 1,creator:1,image_links:1 },
+                projection: { name: 1, rate: 1, category: 1,country_of_origin:1, image: 1,creator:1,image_links:1,available_qty:1 },
             };
 
             const result = await menuCollection.findOne(query, options);
