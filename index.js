@@ -6,6 +6,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
+const sharp = require("sharp");
 
 // middleware
 app.use(cors({
@@ -16,7 +17,10 @@ app.use(cors({
     ],
     credentials: true
 }));
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
+
 app.use(cookieParser());
 
 
@@ -110,10 +114,10 @@ async function run() {
 
 
         // orders 
-        app.get('/orders', logger, verifyToken, async (req, res) => {
-            if(req.user.email !== req.query.email){
-                return res.status(403).send({message: 'forbidden access'})
-            }
+        app.get('/orders', async (req, res) => { //logger, verifyToken, 
+            // if(req.user.email !== req.query.email){
+            //     return res.status(403).send({message: 'forbidden access'})
+            // }
             let query = {};
             if (req.query?.email) {
                 query = { email: req.query.email }
