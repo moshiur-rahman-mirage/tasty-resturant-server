@@ -21,7 +21,7 @@ const sharp = require("sharp");
 
 const corsOptions ={
     origin:['https://resturant-9e927.web.app', 
-    'http://localhost:5173','b8a11-server-side-moshiur-rahman-mirage.vercel.app'],
+    'http://localhost:5173','https://b8a11-server-side-moshiur-rahman-mirage.vercel.app'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
 
