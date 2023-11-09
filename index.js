@@ -121,7 +121,6 @@ async function run() {
             res.clearCookie('token', { maxAge: 0 }).send({ success: true })
         })
 
-   
         app.get('/menu', async (req, res) => {
             const cursor = menuCollection.find().sort( { "order_qty": -1 } ).limit(6);;
             const result = await cursor.toArray();
