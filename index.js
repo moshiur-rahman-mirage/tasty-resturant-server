@@ -19,26 +19,26 @@ const sharp = require("sharp");
 
 
 
-const corsOptions ={
-    origin:['https://resturant-9e927.web.app', 
-    'http://localhost:5173','https://b8a11-server-side-moshiur-rahman-mirage.vercel.app'],
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200,
+// const corsOptions ={
+//     origin:['https://resturant-9e927.web.app', 
+//     'http://localhost:5173','https://b8a11-server-side-moshiur-rahman-mirage.vercel.app'],
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200,
 
-}
-app.use(cors(corsOptions));
+// }
+// app.use(cors(corsOptions));
 
-// app.use(
-//     cors({
-//         origin: ['http://localhost:5173', 'https://resturant-9e927.web.app'],
-//         credentials: true,
-//     }),
-// )
+app.use(
+    cors({
+        origin: ['http://localhost:5173', 'https://resturant-9e927.web.app'],
+        credentials: true,
+    }),
+)
 
 
-// app.use(express.json());
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
+app.use(express.json());
+// app.use(express.json({limit: '50mb'}));
+// app.use(express.urlencoded({limit: '50mb'}));
 
 app.use(cookieParser());
 
@@ -105,7 +105,7 @@ async function run() {
         app.post('/jwt', logger, async (req, res) => {
             const user = req.body;
             console.log('user for token', user);
-            const token = jwt.sign(user, secret, { expiresIn: '1h' });
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
             res.cookie('token', token, {
                 httpOnly: true,
@@ -176,7 +176,7 @@ async function run() {
 
 
         // orders 
-        app.get('/orders',  async (req, res) => { //
+        app.get('/orders',logger, verifyToken,  async (req, res) => { //
             if(req.user.email !== req.query.email){
                 return res.status(403).send({message: 'forbidden access'})
             }
