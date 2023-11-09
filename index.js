@@ -176,7 +176,7 @@ async function run() {
 
 
         // orders 
-        app.get('/orders',logger, verifyToken,  async (req, res) => { //
+        app.get('/orders',  async (req, res) => { //
             if(req.user.email !== req.query.email){
                 return res.status(403).send({message: 'forbidden access'})
             }
