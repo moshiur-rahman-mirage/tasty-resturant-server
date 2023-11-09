@@ -9,14 +9,23 @@ const port = process.env.PORT || 5000;
 const sharp = require("sharp");
 
 // middleware
-app.use(cors({
-    origin: [
-         'https://resturant-9e927.web.app',
-        //'https://cars-doctor-6c129.web.app',
-        //'https://cars-doctor-6c129.firebaseapp.com'
-    ],
-    credentials: true
-}));
+// app.use(cors({
+//     origin: [
+//          'https://resturant-9e927.web.app'
+//     ],
+//     credentials: true
+// }));
+
+
+const cors = require('cors');
+const corsOptions ={
+    origin:'https://resturant-9e927.web.app', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
+
+
 // app.use(express.json());
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
@@ -27,7 +36,6 @@ app.use(cookieParser());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -116,21 +124,6 @@ async function run() {
           })
 
 
-        // app.get('/menu/sort', async (req, res) => {
-        //     const filter = req.query;
-        //     console.log(filter);
-        //     let query = {};
-
-        //     const options = {
-        //         sort: {
-        //             price: filter.sort === 'asc' ? 1 : -1
-        //         }
-        //     };
-
-        //     const cursor = serviceCollection.find(query, options);
-        //     const result = await cursor.toArray();
-        //     res.send(result);
-        // })
 
 
 
@@ -187,20 +180,6 @@ async function run() {
             const result = await orderCollection.updateOne(filter, updateDoc);
             res.send(result);
         })
-
-
-        // app.post('/mealupdate/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const filter = { _id: new ObjectId(id) };
-        //     const updateDoc = {
-        //         $inc: {
-        //             order_count: 1
-        //         },
-        //     };
-        //     const result = await menuCollection.updateOne(filter, updateDoc);
-        //     console.log('incremented?')
-        //     res.send(result);
-        // })
 
 
 
