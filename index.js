@@ -11,7 +11,7 @@ const sharp = require("sharp");
 // middleware
 app.use(cors({
     origin: [
-         'http://localhost:5173',
+         'https://resturant-9e927.web.app',
         //'https://cars-doctor-6c129.web.app',
         //'https://cars-doctor-6c129.firebaseapp.com'
     ],
