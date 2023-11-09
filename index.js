@@ -30,9 +30,9 @@ app.use(cookieParser());
 
 const secret="e9b649b06350d673d9fa7cf7f6eb224289f03cdac0efcc368b6d1ce1c49463a03e7a4299a59b86e96751614e28ca81d0e2e641fe3e317fdb088378af87ff7101"
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
+//const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
 
-//const uri = `mongodb+srv://librarian:Ms121212@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://librarian:Ms121212@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
 
 
 
