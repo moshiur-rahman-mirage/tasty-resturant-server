@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-//const secret="e9b649b06350d673d9fa7cf7f6eb224289f03cdac0efcc368b6d1ce1c49463a03e7a4299a59b86e96751614e28ca81d0e2e641fe3e317fdb088378af87ff7101"
+const secret="e9b649b06350d673d9fa7cf7f6eb224289f03cdac0efcc368b6d1ce1c49463a03e7a4299a59b86e96751614e28ca81d0e2e641fe3e317fdb088378af87ff7101"
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hhabjy4.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -54,7 +54,7 @@ const verifyToken = (req, res, next) =>{
     if(!token){
         return res.status(401).send({message: 'unauthorized access'})
     }
-    jwt.verify(token,  process.env.ACCESS_TOKEN_SECRET, (err, decoded) =>{
+    jwt.verify(token,  secret, (err, decoded) =>{
         if(err){
             return res.status(401).send({message: 'unauthorized access'})
         }
@@ -75,7 +75,7 @@ async function run() {
         app.post('/jwt', logger, async (req, res) => {
             const user = req.body;
             console.log('user for token', user);
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign(user, secret, { expiresIn: '1h' });
 
             res.cookie('token', token, {
                 httpOnly: true,
