@@ -30,7 +30,7 @@ const sharp = require("sharp");
 
 app.use(
     cors({
-        origin: ['http://localhost:5173', 'https://enmmedia-19300.web.app'],
+        origin: ['http://localhost:5173', 'https://resturant-9e927.web.app'],
         credentials: true,
     }),
 )
