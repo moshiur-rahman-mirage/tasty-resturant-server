@@ -8,27 +8,53 @@ const app = express();
 const port = process.env.PORT || 5000;
 const sharp = require("sharp");
 
+// middleware
+// app.use(cors({
+//     origin: [
+//          'https://resturant-9e927.web.app'
+//     ],
+//     credentials: true
+// }));
 
 
 
 
+// const corsOptions ={
+//     origin:['https://resturant-9e927.web.app', 
+//     'http://localhost:5173','https://b8a11-server-side-moshiur-rahman-mirage.vercel.app'],
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200,
 
+// }
+// app.use(cors(corsOptions));
 
 app.use(
     cors({
-        origin: ['http://localhost:5173', 'https://resturant-9e927.web.app'],
+        origin: ['http://localhost:5173', 'https://enmmedia-19300.web.app'],
         credentials: true,
     }),
 )
 
 
-app.use(express.json());
-
+// app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 app.use(cookieParser());
 
 
+// app.use((req, res, next) => {
+//     const allowedOrigins = ['https://resturant-9e927.web.app', 'http://localhost:5173', 'https://b8a11-server-side-moshiur-rahman-mirage.vercel.app'];
+//     const origin = req.headers.origin;
+//     if (allowedOrigins.includes(origin)) {
+//          res.setHeader('Access-Control-Allow-Origin', origin);
+//     }
 
+//     res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     return next();
+//   });
 
 const secret="e9b649b06350d673d9fa7cf7f6eb224289f03cdac0efcc368b6d1ce1c49463a03e7a4299a59b86e96751614e28ca81d0e2e641fe3e317fdb088378af87ff7101"
 
@@ -46,11 +72,12 @@ const client = new MongoClient(uri, {
     }
 });
 
-
+// middlewares 
 const logger = (req, res, next) =>{
     console.log('log: info', req.method, req.url);
     next();
 }
+
 const verifyToken = (req, res, next) =>{
     const token = req?.cookies?.token;
     if(!token){
@@ -67,6 +94,7 @@ const verifyToken = (req, res, next) =>{
 
 async function run() {
     try {
+        // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
         const menuCollection = client.db('Resturant').collection('Menu');
@@ -146,6 +174,8 @@ async function run() {
             res.send(result);
         });
 
+
+        // orders 
         app.get('/orders',logger, verifyToken,  async (req, res) => { //
             if(req.user.email !== req.query.email){
                 return res.status(403).send({message: 'forbidden access'})
@@ -204,11 +234,12 @@ async function run() {
         })
 
 
-
+        // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
-
+        // Ensures that the client will close when you finish/error
+        // await client.close();
     }
 }
 run().catch(console.dir);
