@@ -19,7 +19,8 @@ const sharp = require("sharp");
 
 
 const corsOptions ={
-    origin:'https://resturant-9e927.web.app', 
+    origin:['https://resturant-9e927.web.app', 
+    'http://localhost:5173/'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
