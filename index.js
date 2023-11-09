@@ -17,7 +17,7 @@ const sharp = require("sharp");
 // }));
 
 
-const cors = require('cors');
+
 const corsOptions ={
     origin:'https://resturant-9e927.web.app', 
     credentials:true,            //access-control-allow-credentials:true
