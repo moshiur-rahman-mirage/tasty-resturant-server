@@ -98,9 +98,11 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/menu/all', async (req, res) => {
+        app.get('/pagemenu', async (req, res) => {
             const page = parseInt(req.query.page);
             const size = parseInt(req.query.size);
+            console.log(page)
+            console.log(size)
             const result = await menuCollection.find().sort( { "order_qty": -1 })
             .skip(page * size)
             .limit(size)
